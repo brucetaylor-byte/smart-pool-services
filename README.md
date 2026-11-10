@@ -13,7 +13,7 @@ A clickable demo of the technician and manager app. Nothing here connects to a s
 - Android: open in Chrome, tap the menu, then "Install app" or "Add to Home screen".
 
 ## Things to know
-- Demo data is stored in the browser on each device, so two phones don't share jobs. "Reset demo data" is at the bottom of the manager's Week screen.
+- Demo data is stored in the browser on each device, so two phones don't share jobs. The demo always shows the current week, with sample jobs on today, and the sample data resets each new day. "Reset demo data" is at the bottom of the manager's Week screen.
 - Sign-in is a demo picker (Sam as technician, Alex as manager). There are no real accounts.
 - Customers and phone numbers are made up.
 - After changing files, edit the version in `sw.js` (`sps-v1` to `sps-v2`) so phones pick up the update.
