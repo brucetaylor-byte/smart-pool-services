@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Pool Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef6fb;--card:#fff;--ink:#1d1d1b;--mute:#5a6f75;--line:#d5e4ee;--aqua:#009fe3;--brand:#009fe3;--deep:#1d1d1b;--ok:#1f8a54;--warn:#c77700;--bad:#c4402f;--warnbg:#fdf0d9;--okbg:#e0f3e8;--badbg:#fbe4e0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1a1e;--card:#12282e;--ink:#e6f2f4;--mute:#8fa8ae;--line:#24424a;--aqua:#38b6ee;--brand:#2db2ee;--deep:#2b4350;--okbg:#12362a;--warnbg:#3a2c0f;--badbg:#3d1c17;--ok:#52c585;--warn:#f0a93a;--bad:#f27a69}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:Nunito,Figtree,sans-serif;margin:0;line-height:1.15}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:16px 14px 90px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;margin:6px 2px 14px}
+.top h1{font-size:26px}.top small{color:var(--mute)}
+.pill{font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--okbg);color:var(--ok)}
+.pill.one{background:var(--warnbg);color:var(--warn)}
+.map{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;margin-bottom:12px}
+.map svg{width:100%;height:auto;display:block}
+.job{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:34px 1fr;gap:12px}
+.n{width:34px;height:34px;border-radius:50%;background:var(--deep);color:#fff;display:grid;place-items:center;font-weight:700}
+.job.done .n{background:var(--ok)}
+.job h3{font-size:18px}.job p{margin:2px 0 6px;color:var(--mute);font-size:14px}
+.access{font-size:13px;background:var(--bg);border-radius:8px;padding:6px 9px;margin:6px 0 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;background:var(--aqua);color:#1d1d1b;min-height:44px}
+button.alt{background:transparent;color:var(--ink);border:1.5px solid var(--aqua)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.back{background:none;color:var(--ink);padding:6px 0;min-height:0;margin-bottom:6px}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0 16px}
+.bar i{display:block;height:100%;background:var(--brand);transition:width .3s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.step>header{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;width:100%;text-align:left;background:none;border:0;color:var(--ink);font-weight:600;border-radius:0}
+.step .dot{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:14px;color:var(--mute)}
+.step.ok .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.body{display:none;padding:0 14px 14px}.step.open .body{display:block}
+.chk{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.chk input{width:22px;height:22px;accent-color:var(--aqua)}
+.fld{display:grid;grid-template-columns:1fr 96px;gap:4px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.fld input,textarea{font:inherit;width:100%;padding:9px;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+.fld small{grid-column:1/-1;font-weight:600}
+.fld small.ok{color:var(--ok)}.fld small.low,.fld small.high{color:var(--warn)}
+.hint{color:var(--mute);font-size:14px;margin:0 0 8px}
+.time{font-size:22px;font-weight:600;font-family:Nunito,sans-serif}
+.done-card{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 18px}
+.done-card h2{margin-bottom:6px}
+.note{font-size:13px;color:var(--mute);text-align:center;margin-top:16px}
+.brandbar{background:#fff;border-bottom:4px solid var(--brand);padding:8px 14px calc(8px + env(safe-area-inset-top,0px))}.brandbar div{max-width:430px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}.brandbar img{height:58px;width:auto;display:block}.brandbar span{font-family:Nunito,sans-serif;font-weight:800;color:#1d1d1b;font-size:15px}
+.brandbar span{font-size:13px!important;display:flex;align-items:center}.sign{padding:4px 10px;min-height:34px;font-size:13px;margin-left:8px}.login,.tech{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:10px}.tech{margin:10px 0}.lab{display:block;font-weight:600;margin-top:10px}.lab input,.lab select,.mj select{font:inherit;width:100%;margin-top:4px;padding:10px;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}.mj select{width:auto;margin:0}.mj{padding:10px 0;border-top:1px solid var(--line)}.mj h3{font-size:16px}.days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.days button{padding:8px 2px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);font-size:14px;line-height:1.2}.days button small{display:block;font-weight:500;color:var(--mute);font-size:11px}.days button.on{background:var(--brand);border-color:var(--brand);color:#1d1d1b}.days button.on small{color:#1d1d1b}
+.days.tabs{grid-template-columns:1fr 1fr;margin-bottom:12px}.btn{display:inline-flex;align-items:center;font-weight:600;border-radius:10px;padding:11px 16px;min-height:44px;background:var(--aqua);color:#1d1d1b;text-decoration:none}.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--aqua)}.srch{font:inherit;width:100%;padding:11px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}.crow{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);margin-bottom:8px;padding:12px 14px;font-weight:400}.crow b{display:block;font-size:16px}.crow span{display:block;color:var(--mute);font-size:14px}.crow .pill{display:inline-block;margin-top:6px;font-style:normal}
+.sum{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font:14px/1.5 ui-monospace,Menlo,monospace;margin:8px 0}.dose{border-top:1px solid var(--line);margin-top:6px;padding-top:4px}.step h3{font-size:16px;margin:10px 0 2px}textarea{margin-top:4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#009fe3"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Pool Service">
+</head>
+<body>
+<header class="brandbar"><div><img src="logo.png" alt="Smart Pool Services"><span id="who"></span></div></header>
+<div class="app" id="app"></div>
+<script>
+var jobs=[],ALL=[
+{tech:'Sam',day:3,id:1,name:'Henderson residence',addr:'14 Banksia Ave, Riddells Creek VIC',type:'Weekly service',one:false,access:'Side gate, code 2468. Dog is friendly.',x:70,y:130},
+{tech:'Sam',day:3,id:2,name:'Patel residence',addr:'3 Corlett St, Gisborne VIC',type:'Fortnightly service',one:false,access:'Key under the blue pot.',x:150,y:70},
+{tech:'Sam',day:3,id:3,name:'Ridgeview Caravan Park',addr:'22 Napier St, Macedon VIC',type:'One-off: filter clean',one:true,access:'Call Sam on arrival. Ready from 10am.',x:250,y:110},
+{tech:'Sam',day:3,id:4,name:'Nguyen residence',addr:'9 Jarrah Way, Woodend VIC',type:'Weekly service',one:false,access:'Front door, owner home.',x:320,y:50}];
+ALL.push(
+{tech:'Jo',day:3,id:5,name:'Ellis residence',addr:'7 Mollison St, Kyneton VIC',type:'Weekly service',one:false,access:'Gate unlocked.'},
+{tech:'Jo',day:3,id:6,name:'Romsey Motel',addr:'11 Main Rd, Romsey VIC',type:'Weekly service',one:false,access:'Reception first.'},
+{tech:'Sam',day:0,id:7,name:'Dalton residence',addr:'5 Hamilton Rd, Gisborne VIC',type:'Weekly service',one:false,access:'Side gate.'},
+{tech:'Jo',day:1,id:8,name:'Reilly residence',addr:'2 Lauriston Rd, Woodend VIC',type:'One-off: pump repair',one:true,access:'Owner home.'},
+{tech:'Sam',day:2,id:9,name:'Kerr residence',addr:'18 Ferny Ct, Macedon VIC',type:'Fortnightly service',one:false,access:'Key in lockbox.'},
+{tech:'Jo',day:4,id:10,name:'Lakeview Cottages',addr:'60 Lake Rd, Kyneton VIC',type:'Weekly service',one:false,access:'Call manager on arrival.'});
+var st={body:'pool',mtab:'week',cq:'',cid:null,cform:false,recur:null,user:null,mday:3,add:false,view:'day',job:null,done:{},data:{},open:1};
+var steps=[
+{t:'Time started and finished'},{t:'Overview and skim pool'},{t:'Test water chemistry'},{t:'Pumps on high and vacuum'},{t:'Assess filtration, including backwash'},{t:'Dose pool and note everything'},{t:'Final checks (all on timers etc.)'}];
+var chem=[{k:'cl',s:'Cl',l:'Chlorine',lo:1,hi:3,u:' ppm'},{k:'ph',s:'pH',l:'pH',lo:7.2,hi:7.6,u:''},{k:'ta',s:'Ta',l:'Alkalinity',lo:80,hi:120,u:' ppm'},{k:'salt',s:'Salt',l:'Salt',u:' ppm'}];
+function $(s){return document.querySelector(s)}
+function gmaps(){var r=jobs.filter(function(j){return !st.done[j.id]}).map(function(j){return encodeURIComponent(j.addr)});if(!r.length)return;var u='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+r[r.length-1];if(r.length>1)u+='&waypoints='+r.slice(0,-1).join('%7C');window.open(u,'_blank')}
+function now(){var d=new Date();return d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'})}
+var PRODUCTS=['Chlorine (granular)','Liquid chlorine','Acid','Algaecide','Buffer','Oxy','Minerals','Salt','Other'],UNITS=['g','kg','ml','L','bags'];
+function D(){return st.data[st.job]||(st.data[st.job]={start:'',end:'',chk:{},r:{pool:{},spa:{}},doses:[],set:'',extra:'',todo:'',advice:'',notes:'',filt:''})}
+function stepDone(i){var d=D();
+ if(i==1)return !!(d.start&&d.end);
+ if(i==2)return !!d.chk.skim&&!!d.chk.over;
+ if(i==3)return ['cl','ph','ta'].every(function(k){var v=d.r.pool[k];return v!==undefined&&v!==''});
+ if(i==4)return !!d.chk.pump&&!!d.chk.vac;
+ if(i==5)return !!d.chk.filt;
+ if(i==6)return d.doses.length>0||!!d.chk.nodose;
+ if(i==7)return !!d.chk.timers&&!!d.chk.final;return false}
+function rng(c,v){if(v===''||v===undefined||c.lo===undefined)return '';v=parseFloat(v);return v<c.lo?['low','Low (aim '+c.lo+'–'+c.hi+')']:v>c.hi?['high','High (aim '+c.lo+'–'+c.hi+')']:['ok','In range']}
+function route(){var p=jobs.map(function(j){return j.x+','+j.y}).join(' ');
+ var s='<svg viewBox="0 0 390 170" role="img" aria-label="Route map of today’s four stops"><rect width="390" height="170" rx="10" fill="var(--bg)"/>';
+ s+='<path d="M0 150 Q120 120 200 150 T390 130" stroke="var(--line)" stroke-width="10" fill="none"/>';
+ s+='<polyline points="'+p+'" fill="none" stroke="var(--aqua)" stroke-width="3" stroke-dasharray="7 6"/>';
+ jobs.forEach(function(j,i){var dn=st.done[j.id];s+='<circle cx="'+j.x+'" cy="'+j.y+'" r="13" fill="'+(dn?'var(--ok)':'var(--deep)')+'"/><text x="'+j.x+'" y="'+(j.y+5)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">'+(i+1)+'</text>'});
+ return s+'</svg>'}
+function mockmap(){var nn=jobs.length,P=jobs.map(function(j,i){return nn<2?[196,115]:[Math.round(330-268*i/(nn-1)),Math.round(182-134*i/(nn-1))]});
+var s='<svg viewBox="0 0 390 230" role="img" aria-label="Map preview of today’s route"><rect width="390" height="230" rx="10" fill="var(--bg)"/>';
+s+='<path d="M-10 214 Q80 172 150 192 T270 218 L270 240 L-10 240Z" fill="var(--aqua)" opacity=".2"/><rect x="190" y="26" width="74" height="42" rx="9" fill="var(--ok)" opacity=".16"/><rect x="18" y="96" width="64" height="40" rx="9" fill="var(--ok)" opacity=".16"/><rect x="296" y="84" width="60" height="34" rx="9" fill="var(--ok)" opacity=".16"/>';
+['M0 72 L390 92','M0 152 L390 122','M118 0 L150 230','M292 0 L312 230','M40 0 L22 230','M210 0 L236 230'].forEach(function(d){s+='<path d="'+d+'" stroke="var(--line)" stroke-width="7" fill="none"/><path d="'+d+'" stroke="var(--card)" stroke-width="4" fill="none"/>'});
+var pts=[[362,206]].concat(P).map(function(p){return p.join(',')}).join(' ');
+s+='<polyline points="'+pts+'" fill="none" stroke="var(--card)" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/><polyline points="'+pts+'" fill="none" stroke="var(--brand)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>';
+P.forEach(function(p,i){s+='<text x="'+p[0]+'" y="'+(p[1]+16)+'" text-anchor="middle" font-size="11" font-weight="600" fill="var(--mute)">'+town(jobs[i])+'</text>'});
+s+='<circle cx="362" cy="206" r="7" fill="#2f6fe0" stroke="#fff" stroke-width="2.5"/>';
+P.forEach(function(p,i){var c=st.done[jobs[i].id]?'var(--ok)':'var(--deep)';s+='<polygon points="'+(p[0]-7)+','+(p[1]-10)+' '+(p[0]+7)+','+(p[1]-10)+' '+p[0]+','+p[1]+'" fill="'+c+'"/><circle cx="'+p[0]+'" cy="'+(p[1]-20)+'" r="13" fill="'+c+'" stroke="#fff" stroke-width="2"/><text x="'+p[0]+'" y="'+(p[1]-15)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">'+(i+1)+'</text>'});
+var left=jobs.filter(function(j){return !st.done[j.id]}).length;
+s+='<rect x="10" y="10" width="152" height="26" rx="13" fill="var(--card)" stroke="var(--line)"/><text x="22" y="27" font-size="12" font-weight="600" fill="var(--ink)">'+left+' stops left, about 30 km</text>';
+s+='<text x="10" y="222" font-size="9" fill="var(--mute)">Sample map. The live app shows Google Maps here.</text></svg>';return s}
+function day(){var c=Object.keys(st.done).length,h='<div class="top"><div><h1>Today’s route</h1><small>Thursday 22 October · '+jobs.length+' stops · '+c+' done</small></div></div>';
+ h+='<div class="map">'+mockmap()+'</div><button style="width:100%;margin-bottom:12px" data-gmaps>Open full route in Google Maps</button>';
+ jobs.forEach(function(j,i){var dn=st.done[j.id];
+  h+='<div class="job'+(dn?' done':'')+'"><div class="n">'+(dn?'✓':i+1)+'</div><div><h3>'+j.name+'</h3><p>'+j.addr+'</p><span class="pill'+(j.one?' one':'')+'">'+j.type+'</span><div class="access">'+j.access+'</div><div class="row"><button class="alt" data-nav="'+j.id+'">Navigate</button>'+callBtn(j)+'';
+  h+=dn?'<button class="alt" data-open="'+j.id+'">View record</button>':'<button data-open="'+j.id+'">Start visit</button>';
+  h+='</div></div></div>'});
+ h+='<p class="note">Prototype: jobs and order would come from your Google Calendar.</p>';return h}
+function visit(){var j=jobs.filter(function(x){return x.id==st.job})[0],d=D(),n=0;
+ for(var i=1;i<=7;i++)if(stepDone(i))n++;
+ var h='<button class="back" data-back>‹ Back to route</button><h2>'+j.name+'</h2><p class="hint">'+j.addr+'</p><div class="bar"><i style="width:'+(n/7*100)+'%"></i></div>';
+ steps.forEach(function(s,k){var i=k+1,ok=stepDone(i);
+  h+='<section class="step'+(ok?' ok':'')+(st.open==i?' open':'')+'"><header data-step="'+i+'"><span class="dot">'+(ok?'✓':i)+'</span>'+s.t+'</header><div class="body">'+body(i,d)+'</div></section>'});
+ h+='<div style="margin-top:14px"><button style="width:100%" data-finish '+(n<7?'disabled style="opacity:.45;width:100%"':'')+'>Complete visit</button></div>';
+ return h}
+function chk(k,l,d){return '<label class="chk"><input type="checkbox" data-c="'+k+'" '+(d.chk[k]?'checked':'')+'>'+l+'</label>'}
+function ta(f,l,ph,d,n){return '<label class="lab">'+l+'<textarea rows="'+(n||2)+'" data-f="'+f+'" placeholder="'+ph+'">'+d[f]+'</textarea></label>'}
+function sel(id,a){return '<select id="'+id+'">'+a.map(function(x){return '<option>'+x+'</option>'}).join('')+'</select>'}
+function body(i,d){
+ if(i==1)return '<div class="row" style="justify-content:space-between;padding:4px 0 10px"><div><small>Started</small><div class="time">'+(d.start||'–')+'</div></div><div><small>Finished</small><div class="time">'+(d.end||'–')+'</div></div></div><div class="row"><button data-t="start" '+(d.start?'disabled style="opacity:.45"':'')+'>Start now</button><button class="alt" data-t="end" '+(!d.start||d.end?'disabled style="opacity:.45"':'')+'>Finish now</button></div>';
+ if(i==2)return chk('over','Overview of pool and surrounds done',d)+chk('skim','Skimmed pool and emptied baskets',d)+'<div class="row" style="padding-top:10px"><button class="alt" data-photo>Add photo</button></div>';
+ if(i==3){var b=st.body,r=d.r[b];return '<div class="days tabs"><button data-body="pool" class="'+(b=='pool'?'on':'')+'">Pool</button><button data-body="spa" class="'+(b=='spa'?'on':'')+'">Spa (optional)</button></div><p class="hint">Ranges shown are samples. The manager would set your own.</p>'+chem.map(function(c){var x=rng(c,r[c.k]);return '<div class="fld"><label>'+c.l+c.u+'</label><input inputmode="decimal" data-chem="'+c.k+'" value="'+(r[c.k]||'')+'">'+(x?'<small class="'+x[0]+'">'+x[1]+'</small>':'')+'</div>'}).join('')}
+ if(i==4)return chk('pump','Pumps set to high',d)+chk('vac','Pool vacuumed',d);
+ if(i==5)return chk('filt','Filtration assessed (pressure, baskets, backwash if needed)',d)+ta('filt','Filtration notes','e.g. pressure reading, backwashed',d);
+ var h='<h3>Added</h3>'+d.doses.map(function(x,k){return '<div class="chk"><span style="flex:1">'+x.f+': '+fd(x)+'</span><button class="alt sign" data-rm="'+k+'">Remove</button></div>'}).join('');
+ if(i==6)return h+'<div class="dose"><label class="lab">Product'+sel('dp',PRODUCTS)+'</label><div class="row"><label class="lab" style="flex:1">Amount<input id="da" inputmode="decimal"></label><label class="lab" style="flex:1">Unit'+sel('du',UNITS)+'</label><label class="lab" style="flex:1">For'+sel('df',['Pool','Spa'])+'</label></div><button class="alt" style="margin:10px 0" data-adddose>Add dose</button></div>'+chk('nodose','No dosing needed this visit',d)+ta('set','Equipment settings changed','e.g. ORP 760 to 750',d)+ta('extra','Extra tasks completed','Anything done beyond the standard list',d)+ta('todo','Tasks to be completed, or to bring next time','e.g. bring 25 kg buffer',d)+ta('advice','Advice given to customer','e.g. suggested draining and refilling the spa',d)+ta('notes','Notes','',d,3);
+ return chk('timers','Pumps and equipment back on timers',d)+chk('final','Gate closed, area tidy',d)}
+function fd(x){return (x.u=='bags'?x.a+' bags':x.a+x.u)+' '+x.p.toLowerCase()}
+function adddose(){var a=$('#da').value.trim();if(!a){alert('Enter an amount.');return}D().doses.push({p:$('#dp').value,a:a,u:$('#du').value,f:$('#df').value});keep()}
+function summary(){var j=jobs.filter(function(x){return x.id==st.job})[0],d=D(),L=[DL[j.day]+', '+d.start+' - '+d.end+' ('+j.tech+')'],two=chem.some(function(k){return d.r.spa[k.k]});
+ [['pool','Pool'],['spa','Spa']].forEach(function(b){var r=d.r[b[0]],rows=chem.filter(function(k){return r[k.k]}).map(function(k){return k.s+' '+r[k.k]}),ds=d.doses.filter(function(x){return x.f==b[1]}).map(fd);
+  if(!rows.length&&!ds.length)return;L.push('');if(two)L.push(b[1]);L=L.concat(rows);if(ds.length)L.push('Added '+ds.join(', '))});
+ [['set','Settings changed'],['filt','Filtration'],['extra','Extra tasks done'],['advice','Advice'],['notes','Notes'],['todo','Next time / to do']].forEach(function(f){if(d[f[0]].trim()){if(L[L.length-1]!=='')L.push('');L.push(f[1]+': '+d[f[0]].trim())}});
+ return L.join('\n')}
+function copysum(){var t=summary();try{navigator.clipboard.writeText(t).then(function(){alert('Copied. Paste it into the calendar entry.')},function(){alert('Could not copy. Select the text and copy it.')})}catch(e){alert('Could not copy. Select the text and copy it.')}}
+function finished(){var j=jobs.filter(function(x){return x.id==st.job})[0];
+ return '<div class="done-card" style="text-align:left"><h2 style="text-align:center">Visit saved</h2><p class="hint" style="text-align:center">'+j.name+'</p><p class="hint">Calendar entry preview. The live app would write this into the event for you.</p><pre class="sum">'+summary().replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre><div class="row" style="justify-content:center;margin-top:12px"><button data-copy>Copy summary</button><button class="alt" data-back>Back to route</button></div></div>'}
+var DN=['Mon','Tue','Wed','Thu','Fri'],DL=['Mon 19 Oct','Tue 20 Oct','Wed 21 Oct','Thu 22 Oct','Fri 23 Oct'];
+var PH={'Henderson residence':'0491 570 156','Patel residence':'0491 570 157','Ridgeview Caravan Park':'0491 570 158','Nguyen residence':'0491 570 159','Ellis residence':'0491 570 110','Romsey Motel':'0491 570 006','Dalton residence':'0491 570 313','Reilly residence':'0491 570 737','Kerr residence':'0491 570 158'},CUST=[];
+ALL.forEach(function(j){if(!CUST.some(function(c){return c.name==j.name}))CUST.push({id:CUST.length+1,name:j.name,phone:PH[j.name]||'',email:j.name=='Henderson residence'?'henderson@example.com':'',addr:j.addr,access:j.access,freq:j.one?'':(j.type.indexOf('Fortnightly')>-1?'Fortnightly':'Weekly'),day:j.day,tech:j.tech})});
+function custByName(n){return CUST.filter(function(c){return c.name==n})[0]}
+function callBtn(j){var c=custByName(j.name);return c&&c.phone?'<a class="btn alt" href="tel:'+c.phone.replace(/\s/g,'')+'">Call</a>':''}
+function mkJob(c,f,d,t){ALL.push({id:Date.now()%1000000+Math.floor(Math.random()*999),name:c.name,addr:c.addr,type:f+' service',one:false,access:c.access||'No access notes yet.',tech:t,day:d});c.freq=f;c.day=d;c.tech=t}
+function clist(){var q=(st.cq||'').toLowerCase(),L=CUST.filter(function(x){return (x.name+' '+x.addr+' '+x.phone).toLowerCase().indexOf(q)>-1}).sort(function(a,b){return a.name<b.name?-1:1}),h='';
+ if(!L.length)return '<p class="hint">No customers match.</p>';
+ L.forEach(function(c){h+='<button class="crow" data-cust="'+c.id+'"><b>'+c.name+'</b><span>'+c.addr+'</span><span>'+(c.phone||'No phone on file')+'</span><em class="pill'+(c.freq?'':' one')+'">'+(c.freq?'Repeat: '+c.freq:'One-off')+'</em></button>'});return h}
+function opts(a){return a.map(function(x,i){return '<option value="'+i+'">'+x+'</option>'}).join('')}
+function sched(p){return '<label class="lab">Frequency<select id="'+p+'-freq"><option>Weekly</option><option>Fortnightly</option><option>Monthly</option></select></label><label class="lab">Day<select id="'+p+'-day">'+opts(DN).replace('value="3"','value="3" selected')+'</select></label><label class="lab">Technician<select id="'+p+'-tech"><option>Sam</option><option>Jo</option></select></label>'}
+function card(c){var h='<button class="back" data-cback>‹ Customers</button><h2>'+c.name+'</h2><p class="hint">'+c.addr+'</p><div class="row" style="margin-bottom:10px">'+(c.phone?'<a class="btn" href="tel:'+c.phone.replace(/\s/g,'')+'">Call '+c.phone+'</a>':'<span class="hint">No phone on file</span>')+(c.email?'<a class="btn alt" href="mailto:'+c.email+'">Email</a>':'')+'<a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(c.addr)+'">Map</a></div>';
+ h+='<div class="tech"><h3>Schedule</h3><p style="margin:6px 0">'+(c.freq?'<span class="pill">Repeat: '+c.freq+'</span> '+DN[c.day]+'s with '+c.tech:'<span class="pill one">One-off</span> No repeat schedule yet')+'</p>';
+ if(!c.freq&&st.recur!=c.id)h+='<button style="width:100%;margin-top:6px" data-recur="'+c.id+'">Make recurring</button>';
+ if(st.recur==c.id)h+=sched('rc')+'<p class="hint" style="margin-top:8px">The first repeat visit is added to that day this week.</p><button style="width:100%" data-saverecur="'+c.id+'">Save schedule</button>';
+ h+='</div><div class="tech"><h3>Access notes</h3><p style="margin:6px 0">'+(c.access||'None yet.')+'</p></div><div class="tech"><h3>Visit history</h3>';
+ ALL.filter(function(j){return j.name==c.name}).sort(function(a,b){return a.day-b.day}).forEach(function(j){var d=st.data[j.id],r=d?chem.filter(function(k){return d.r.pool[k.k]}).map(function(k){return k.l+' '+d.r.pool[k.k]}).join(', '):'';
+  h+='<div class="mj"><b>'+DL[j.day]+'</b> · '+j.tech+' · '+j.type+'<br><small class="hint">'+(st.done[j.id]?'Done'+(r?'. '+r:''):'Scheduled')+'</small></div>'});
+ return h+'<p class="hint" style="margin-top:10px">The live app would also show photos, the communications log and dated notes here.</p></div>'}
+function custs(){var c=st.cid&&CUST.filter(function(x){return x.id==st.cid})[0];if(c)return card(c);
+ var h='<div class="top"><div><h1>Customers</h1><small>'+CUST.length+' in directory</small></div></div><input id="cq" class="srch" placeholder="Search name, suburb or phone" value="'+(st.cq||'').replace(/["<&]/g,'')+'"><button style="width:100%;margin:10px 0" data-addcust>'+(st.cform?'Cancel':'Add customer')+'</button>';
+ if(st.cform)h+='<div class="login" style="margin:0 0 12px"><h3>New customer</h3><label class="lab">Name<input id="nc-name"></label><label class="lab">Phone<input id="nc-phone" type="tel"></label><label class="lab">Email<input id="nc-email" type="email"></label><label class="lab">Address<input id="nc-addr" placeholder="e.g. 8 High St, Kyneton"></label><label class="lab">Access notes<input id="nc-acc" placeholder="Gate code, dogs, key"></label><label class="lab">Service<select id="nc-plan"><option>Repeat service</option><option>No schedule yet</option></select></label>'+sched('nc')+'<button style="width:100%;margin-top:12px" data-savecust>Save customer</button></div>';
+ return h+'<div id="clist">'+clist()+'</div>'}
+function savecust(){var n=$('#nc-name').value.trim(),a=$('#nc-addr').value.trim();if(!n||!a){alert('Enter a name and an address, like 8 High St, Kyneton.');return}
+ if(a.indexOf('VIC')<0)a+=' VIC';var c={id:Date.now()%1000000,name:n,phone:$('#nc-phone').value.trim(),email:$('#nc-email').value.trim(),addr:a,access:$('#nc-acc').value.trim(),freq:'',day:0,tech:''};CUST.push(c);
+ if($('#nc-plan').value=='Repeat service')mkJob(c,$('#nc-freq').value,+$('#nc-day').value,$('#nc-tech').value);st.cform=false;st.cid=c.id;render()}
+function mgr(){return '<div class="days tabs"><button data-tab="week" class="'+(st.mtab=='week'?'on':'')+'">Week</button><button data-tab="cust" class="'+(st.mtab=='cust'?'on':'')+'">Customers</button></div>'+(st.mtab=='cust'?custs():week())}
+function sync(){jobs=ALL.filter(function(j){return j.tech=='Sam'&&j.day==3})}
+function town(j){var p=j.addr.split(', ');return (p[1]||p[0]).replace(' VIC','')}
+function login(){return '<div class="login"><h2>Sign in</h2><p class="hint">Demo only. The real app asks for each person’s own email and password, or emails a sign-in link.</p><label class="lab">Email<input type="email" placeholder="you@smartpoolservices.com.au" autocomplete="off"></label><label class="lab">Password<input type="password" placeholder="Password" autocomplete="off"></label><p class="hint" style="margin-top:16px">For this demo, choose an account:</p><div class="row" style="flex-direction:column;align-items:stretch"><button data-login="tech">Sign in as Sam, technician</button><button class="alt" data-login="mgr">Sign in as Alex, manager</button></div></div>'}
+function week(){var D5=['Mon 19','Tue 20','Wed 21','Thu 22','Fri 23'],h='<div class="top"><div><h1>Week of 19 October</h1><small>All technicians</small></div></div><div class="days">';
+ D5.forEach(function(l,i){var n=ALL.filter(function(j){return j.day==i}).length;h+='<button data-mday="'+i+'" class="'+(st.mday==i?'on':'')+'">'+l+'<small>'+n+' jobs</small></button>'});
+ h+='</div><button class="alt" style="width:100%;margin:12px 0" data-addform>'+(st.add?'Cancel':'Add one-off job')+'</button>';
+ if(st.add)h+='<div class="login" style="margin:0 0 12px"><h3>New one-off job</h3><label class="lab">Customer<input id="nj-name" placeholder="e.g. Brown residence"></label><label class="lab">Address<input id="nj-addr" placeholder="e.g. 8 High St, Kyneton"></label><label class="lab">Phone<input id="nj-phone" type="tel"></label><label class="lab">Job<select id="nj-type"><option>One-off: filter clean</option><option>One-off: pump repair</option><option>One-off: equipment install</option><option>One-off: other</option></select></label><label class="lab">Technician<select id="nj-tech"><option>Sam</option><option>Jo</option></select></label><p class="hint" style="margin-top:8px">Added to '+D5[st.mday]+'.</p><button style="width:100%" data-addjob>Add job</button></div>';
+ ['Sam','Jo'].forEach(function(t){var L=ALL.filter(function(j){return j.day==st.mday&&j.tech==t});
+  h+='<div class="tech"><h3>'+t+' <small style="font-weight:500;color:var(--mute)">'+L.length+' jobs</small></h3>';
+  if(!L.length)h+='<p class="hint" style="margin:8px 0 0">Nothing scheduled.</p>';
+  L.forEach(function(j){h+='<div class="mj"><h3>'+j.name+'</h3><p class="hint" style="margin:0 0 6px">'+j.addr+'</p><div class="row" style="justify-content:space-between"><span class="pill'+(j.one?' one':'')+'">'+j.type+'</span>'+(st.done[j.id]?'<span class="pill">Done</span>':'<select data-assign="'+j.id+'" aria-label="Assign to"><option'+(j.tech=='Sam'?' selected':'')+'>Sam</option><option'+(j.tech=='Jo'?' selected':'')+'>Jo</option></select>')+'</div>'+(j.one&&custByName(j.name)&&!custByName(j.name).freq?'<button class="alt" style="margin-top:8px" data-recur="'+custByName(j.name).id+'">Make recurring</button>':'')+'</div>'});
+  h+='</div>'});
+ return h+'<p class="note"><button class="alt" data-reset>Reset demo data</button></p><p class="note">Prototype: moving a Thursday job between Sam and Jo changes Sam’s route when you sign in as him.</p>'}
+function addjob(){var n=$('#nj-name').value.trim(),a=$('#nj-addr').value.trim();if(!n||!a){alert('Enter a customer name and an address, like 8 High St, Kyneton.');return}
+ if(a.indexOf('VIC')<0)a+=' VIC';var ty=$('#nj-type').value;ALL.push({id:Date.now()%1000000,name:n,addr:a,type:ty,one:true,access:'No access notes yet.',tech:$('#nj-tech').value,day:st.mday});if(!custByName(n))CUST.push({id:Date.now()%1000000+1,name:n,phone:$('#nj-phone').value.trim(),email:'',addr:a,access:'',freq:'',day:st.mday,tech:''});st.add=false;render()}
+function save(){try{localStorage.setItem('sps1',JSON.stringify({ALL:ALL,CUST:CUST,done:st.done,data:st.data}))}catch(e){}}
+function load(){try{var x=JSON.parse(localStorage.getItem('sps1')||'null');if(x){ALL.length=0;x.ALL.forEach(function(j){ALL.push(j)});CUST.length=0;x.CUST.forEach(function(c){CUST.push(c)});st.done=x.done;st.data=x.data}}catch(e){}}
+function render(){save();sync();var a=$('#app'),u=st.user;$('#who').innerHTML=u?u.name+'<button class="alt sign" data-out>Sign out</button>':'';
+ a.innerHTML=!u?login():u.role=='mgr'?mgr():st.view=='day'?day():st.view=='visit'?visit():finished();
+ if(u&&u.role=='tech'&&st.view=='day'&&!jobs.length)a.insertAdjacentHTML('beforeend','<p class="hint">No jobs assigned to you today.</p>');window.scrollTo(0,0)}
+
+function keep(){var y=window.scrollY;var a=$('#app');a.innerHTML=visit();window.scrollTo(0,y)}
+document.addEventListener('click',function(e){var t=e.target.closest('button,header');if(!t)return;
+ if(t.dataset.body){st.body=t.dataset.body;keep()}
+ else if(t.hasAttribute('data-adddose')){adddose()}
+ else if(t.dataset.rm){D().doses.splice(+t.dataset.rm,1);keep()}
+ else if(t.hasAttribute('data-copy')){copysum()}
+ else if(t.hasAttribute('data-reset')){try{localStorage.removeItem('sps1')}catch(e){}location.reload()}
+ else if(t.dataset.tab){st.mtab=t.dataset.tab;st.cid=null;st.recur=null;render()}
+ else if(t.dataset.cust){st.cid=+t.dataset.cust;render()}
+ else if(t.hasAttribute('data-cback')){st.cid=null;st.recur=null;render()}
+ else if(t.hasAttribute('data-addcust')){st.cform=!st.cform;render()}
+ else if(t.hasAttribute('data-savecust')){savecust()}
+ else if(t.dataset.recur){st.mtab='cust';st.cid=+t.dataset.recur;st.recur=st.cid;render()}
+ else if(t.dataset.saverecur){var c=custByName(CUST.filter(function(x){return x.id==st.cid})[0].name);mkJob(c,$('#rc-freq').value,+$('#rc-day').value,$('#rc-tech').value);st.recur=null;render()}
+ else if(t.dataset.login){st.user=t.dataset.login=='mgr'?{role:'mgr',name:'Alex, manager'}:{role:'tech',name:'Sam, technician'};st.view='day';render()}
+ else if(t.hasAttribute('data-out')){st.user=null;st.view='day';render()}
+ else if(t.dataset.mday){st.mday=+t.dataset.mday;render()}
+ else if(t.hasAttribute('data-addform')){st.add=!st.add;render()}
+ else if(t.hasAttribute('data-addjob')){addjob()}
+ else if(t.dataset.open){st.job=+t.dataset.open;st.view='visit';st.open=1;render()}
+ else if(t.hasAttribute('data-back')){st.view='day';render()}
+ else if(t.hasAttribute('data-gmaps')){gmaps()}
+ else if(t.dataset.nav){alert('Opens Google Maps or Apple Maps with this address.')}
+ else if(t.dataset.step){st.open=st.open==t.dataset.step?0:+t.dataset.step;keep()}
+ else if(t.dataset.t){var d=D();d[t.dataset.t]=now();keep()}
+ else if(t.hasAttribute('data-photo')){alert('Opens the camera and attaches the photo to this visit.')}
+ else if(t.hasAttribute('data-finish')&&!t.disabled){st.done[st.job]=true;st.view='fin';render()}});
+document.addEventListener('input',function(e){if(e.target.id=='cq'){st.cq=e.target.value;$('#clist').innerHTML=clist()}});
+document.addEventListener('change',function(e){var t=e.target;if(t.dataset&&t.dataset.assign){ALL.filter(function(j){return j.id==t.dataset.assign})[0].tech=t.value;render()}});
+document.addEventListener('change',function(e){var t=e.target,d=st.job&&D();if(t.dataset.c){d.chk[t.dataset.c]=t.checked;keep()}});
+document.addEventListener('input',function(e){var t=e.target,d=st.job&&D();
+ if(t.dataset.f)d[t.dataset.f]=t.value;
+ if(t.dataset.chem){d.r[st.body][t.dataset.chem]=t.value;var c=chem.filter(function(x){return x.k==t.dataset.chem})[0],r=rng(c,t.value),f=t.closest('.fld'),s=f.querySelector('small');
+  if(!s){s=document.createElement('small');f.appendChild(s)}
+  if(r){s.className=r[0];s.textContent=r[1]}else s.remove()}});
+document.addEventListener('focusout',function(e){if(e.target.dataset&&(e.target.dataset.chem||e.target.dataset.f)&&st.view=='visit')setTimeout(function(){if(!document.activeElement||document.activeElement===document.body)keep()},0)});
+document.addEventListener('input',save);load();render();
+if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js')});
+</script>
+</body>
+</html>
